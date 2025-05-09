@@ -1,15 +1,18 @@
 import re
-from validate_docbr import CPF, CNPJ  # Biblioteca para validação de documentos
+from validate_docbr import CPF # Biblioteca para validação de documentos
 from email_validator import validate_email, EmailNotValidError
 
 class DataQuality:
     @staticmethod
+    def _clean_cpf(cpf: str) -> str:
+        """Método interno para limpeza do CPF (remove formatação)"""
+        return ''.join(filter(str.isdigit, cpf))
+    
+    @staticmethod
     def validate_cpf(cpf: str) -> bool:
         """Valida CPF usando a biblioteca validate_docbr."""
-        print(f"Validando CPF recebido: '{cpf}'") 
-        cpf = ''.join(filter(str.isdigit, cpf))  # Remove caracteres não numéricos
-        print(f"CPF após limpeza: '{cpf}'")
-        return CPF().validate(cpf)
+        cpf_clean = DataQuality._clean_cpf(cpf)
+        return CPF().validate(cpf_clean)
     
     '''
     @staticmethod
@@ -38,7 +41,8 @@ class DataQuality:
         
     @staticmethod
     def normalize_cpf(cpf: str) -> str:
-        return ''.join(filter(str.isdigit, cpf))
+        """Normaliza CPF para formato numérico"""
+        return DataQuality._clean_cpf(cpf)
     
     '''
     @staticmethod
