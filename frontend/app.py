@@ -30,25 +30,32 @@ def clean_input_command():
 # Funções para manipulação dos dados e atualização da interface
 def view_command():
     try:
+        # Limpa a tabela
+        for item in app.treeClientes.get_children():
+            app.treeClientes.delete(item)
+            
+        # Preenche com novos dados
         rows = operations.view()
-        app.listClientes.delete(0, END)
-        for r in rows:
-            app.listClientes.insert(END, r)
+        for row in rows:
+            app.treeClientes.insert('', 'end', values=row)
     except Exception as e:
         messagebox.showerror("Erro", f"Erro ao carregar clientes: {str(e)}")
         
 def search_command():
     try:
+        # Limpa a tabela
+        for item in app.treeClientes.get_children():
+            app.treeClientes.delete(item)
+            
         rows = operations.search(
             app.txtNome.get(), 
             app.txtSobrenome.get(), 
             app.txtEmail.get(), 
             app.txtCPF.get()
         )
-        app.listClientes.delete(0, END)
-        for r in rows:
-            app.listClientes.insert(END, r)
-        clean_input_command()  # Limpa os campos após a busca
+        for row in rows:
+            app.treeClientes.insert('', 'end', values=row)
+        clean_input_command()
     except Exception as e:
         messagebox.showerror("Erro", f"Erro na busca: {str(e)}")
 
@@ -113,8 +120,12 @@ def delete_command():
     
 def getSelectedRow(event):
     global selected
-    index = app.listClientes.curselection()[0]
-    selected = app.listClientes.get(index)
+    # Obtém o item selecionado na Treeview
+    selected_item = app.treeClientes.focus()
+    if not selected_item:
+        return
+        
+    selected = app.treeClientes.item(selected_item)['values']
     app.entNome.delete(0, END)
     app.entNome.insert(END, selected[1])
     app.entSobrenome.delete(0, END)
@@ -127,7 +138,7 @@ def getSelectedRow(event):
 
 if __name__=="__main__":
    app = Gui()
-   app.listClientes.bind('<<ListboxSelect>>', getSelectedRow)
+   app.treeClientes.bind('<<TreeviewSelect>>', getSelectedRow)
    
     # Configuração dos comandos dos botões na interface
    app.btnViewAll.configure(command=view_command)
@@ -135,7 +146,7 @@ if __name__=="__main__":
    app.btnInserir.configure(command=insert_command)
    app.btnUpdate.configure(command=update_command)
    app.btnDelete.configure(command=delete_command)
-   app.btnClose.configure(command=app.window.destroy)
+   #app.btnClose.configure(command=app.window.destroy)
    
  
    '''
