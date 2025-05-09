@@ -42,15 +42,24 @@ class ClientOperations:
             raise e
 
     def _log_operation(self, operation, table_name, record_id, old_values=None, new_values=None):
-        """Registra operações na tabela de auditoria"""
+        """Registra operações na tabela de auditoria com anonimização automática de PII"""
+        def anonymize_if_pii(data):
+            if not data:
+                return None
+            return {
+                field: DataQuality.anonymize_data(value) if DataQuality.is_pii_field(field) 
+                    else value
+                for field, value in data.items()
+            }
+
         cursor = self.db.conn.cursor()
         cursor.execute(
             """INSERT INTO audit_log 
             (operacao, tabela, id_registro, dados_antigos, dados_novos) 
             VALUES (%s, %s, %s, %s, %s)""",
             (operation, table_name, record_id, 
-            json.dumps(old_values) if old_values else None, 
-            json.dumps(new_values) if new_values else None)
+            json.dumps(anonymize_if_pii(old_values)) if old_values else None, 
+            json.dumps(anonymize_if_pii(new_values)) if new_values else None)
         )
 
     def view(self):
