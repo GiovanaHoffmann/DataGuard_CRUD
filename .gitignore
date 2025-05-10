@@ -4,3 +4,4 @@ clientes.db
 .env
 client_governance.egg-info
 virtualenv
+setup.py
