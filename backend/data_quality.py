@@ -4,31 +4,15 @@ from email_validator import validate_email, EmailNotValidError
 
 class DataQuality:
     @staticmethod
-    def _clean_cpf(cpf: str) -> str:
-        """Método interno para limpeza do CPF (remove formatação)"""
+    def normalize_cpf(cpf: str) -> str:
+        """Normaliza CPF removendo toda formatação"""
         return ''.join(filter(str.isdigit, cpf))
     
     @staticmethod
     def validate_cpf(cpf: str) -> bool:
         """Valida CPF usando a biblioteca validate_docbr."""
-        cpf_clean = DataQuality._clean_cpf(cpf)
+        cpf_clean = DataQuality.normalize_cpf(cpf)
         return CPF().validate(cpf_clean)
-    
-    '''
-    @staticmethod
-    def validate_cpf(cpf: str) -> bool:
-        cpf = ''.join(filter(str.isdigit, cpf))
-        if len(cpf) != 11 or cpf == cpf[0] * 11:
-            return False
-            
-        # Cálculo dos dígitos verificadores
-        for i in range(9, 11):
-            value = sum((int(cpf[num]) * ((i+1) - num) for num in range(0, i)))
-            digit = ((value * 10) % 11) % 10
-            if digit != int(cpf[i]):
-                return False
-        return True
-    '''
 
     @staticmethod
     def validate_email(email: str) -> bool:
@@ -38,11 +22,6 @@ class DataQuality:
             return True
         except EmailNotValidError:
             return False
-        
-    @staticmethod
-    def normalize_cpf(cpf: str) -> str:
-        """Normaliza CPF para formato numérico"""
-        return DataQuality._clean_cpf(cpf)
     
     '''
     @staticmethod

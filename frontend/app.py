@@ -66,7 +66,7 @@ def insert_command():
     
     try:
         # Primeiro remove formatação
-        cpf_raw = ''.join(filter(str.isdigit, app.txtCPF.get()))
+        cpf_raw = DataQuality.normalize_cpf(app.txtCPF.get()) 
         
         # Depois valida o CPF limpo
         if not DataQuality.validate_cpf(cpf_raw):
