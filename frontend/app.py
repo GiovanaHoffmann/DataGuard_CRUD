@@ -34,10 +34,24 @@ def view_command():
         for item in app.treeClientes.get_children():
             app.treeClientes.delete(item)
             
-        # Preenche com novos dados
+        # Preenche com novos dados incluindo todas as colunas
         rows = operations.view()
         for row in rows:
-            app.treeClientes.insert('', 'end', values=row)
+            # Formata os campos booleanos e datas
+            ativo = 'Sim' if row[7] else 'Não'
+            criacao = row[5].strftime('%d/%m/%Y %H:%M') if row[5] else ''
+            atualizacao = row[6].strftime('%d/%m/%Y %H:%M') if row[6] else ''
+            
+            app.treeClientes.insert('', 'end', values=(
+                row[0],  # ID
+                row[1],  # Nome
+                row[2],  # Sobrenome
+                row[3],  # Email
+                row[4],  # CPF
+                criacao,
+                atualizacao,
+                ativo
+            ))
     except Exception as e:
         messagebox.showerror("Erro", f"Erro ao carregar clientes: {str(e)}")
         
@@ -47,14 +61,36 @@ def search_command():
         for item in app.treeClientes.get_children():
             app.treeClientes.delete(item)
             
-        rows = operations.search(
-            app.txtNome.get(), 
-            app.txtSobrenome.get(), 
-            app.txtEmail.get(), 
-            app.txtCPF.get()
-        )
+        # Obtém os valores dos campos de pesquisa
+        nome = app.txtNome.get().strip()
+        sobrenome = app.txtSobrenome.get().strip()
+        email = app.txtEmail.get().strip()
+        cpf = app.txtCPF.get().strip()
+        
+        # Verifica se pelo menos um campo foi preenchido
+        if not any([nome, sobrenome, email, cpf]):
+            messagebox.showwarning("Aviso", "Preencha pelo menos um campo para pesquisar")
+            return
+            
+        rows = operations.search(nome, sobrenome, email, cpf)
+        
+        # Formata os resultados igual à view_command
         for row in rows:
-            app.treeClientes.insert('', 'end', values=row)
+            ativo = 'Sim' if row[7] else 'Não'
+            criacao = row[5].strftime('%d/%m/%Y %H:%M') if row[5] else ''
+            atualizacao = row[6].strftime('%d/%m/%Y %H:%M') if row[6] else ''
+            
+            app.treeClientes.insert('', 'end', values=(
+                row[0],  # ID
+                row[1],  # Nome
+                row[2],  # Sobrenome
+                row[3],  # Email
+                row[4],  # CPF
+                criacao,
+                atualizacao,
+                ativo
+            ))
+            
         clean_input_command()
     except Exception as e:
         messagebox.showerror("Erro", f"Erro na busca: {str(e)}")
@@ -121,7 +157,6 @@ def delete_command():
     
 def getSelectedRow(event):
     global selected
-    # Obtém o item selecionado na Treeview
     selected_item = app.treeClientes.focus()
     if not selected_item:
         return
@@ -135,6 +170,7 @@ def getSelectedRow(event):
     app.entEmail.insert(END, selected[3])
     app.entCPF.delete(0, END)
     app.entCPF.insert(END, selected[4])
+    # Não preenchemos os campos de data/ativo no formulário
     return selected
 
 if __name__=="__main__":

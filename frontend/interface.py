@@ -31,21 +31,28 @@ class Gui:
          # Lista de clientes, barra de rolagem e botões
         #self.listClientes = tk.Listbox(self.window, width=100)
         #self.scrollClientes = tk.Scrollbar(self.window)
-        self.treeClientes = ttk.Treeview(self.window, columns=('ID', 'Nome', 'Sobrenome', 'Email', 'CPF'), show='headings')
+        self.treeClientes = ttk.Treeview(
+        self.window, 
+        columns=('ID', 'Nome', 'Sobrenome', 'Email', 'CPF', 'Criação', 'Atualização', 'Ativo'), 
+        show='headings'
+        )
     
         # Configuração das colunas
-        self.treeClientes.heading('ID', text='ID')
-        self.treeClientes.heading('Nome', text='Nome')
-        self.treeClientes.heading('Sobrenome', text='Sobrenome')
-        self.treeClientes.heading('Email', text='Email')
-        self.treeClientes.heading('CPF', text='CPF')
+        colunas = [
+            #col_id, texto, largura
+            ('ID', 'ID', 50),
+            ('Nome', 'Nome', 150),
+            ('Sobrenome', 'Sobrenome', 150),
+            ('Email', 'Email', 200),
+            ('CPF', 'CPF', 120),
+            ('Criação', 'Data Criação', 120),
+            ('Atualização', 'Última Atualização', 120),
+            ('Ativo', 'Ativo', 60)
+        ]
         
-        # Ajuste de largura das colunas
-        self.treeClientes.column('ID', width=50, anchor='center')
-        self.treeClientes.column('Nome', width=150)
-        self.treeClientes.column('Sobrenome', width=150)
-        self.treeClientes.column('Email', width=200)
-        self.treeClientes.column('CPF', width=120, anchor='center')
+        for col_id, texto, largura in colunas:
+            self.treeClientes.heading(col_id, text=texto)
+            self.treeClientes.column(col_id, width=largura, anchor='center' if col_id in ['ID', 'Ativo'] else 'w')
         
         # Barra de rolagem
         self.scrollClientes = ttk.Scrollbar(self.window, orient="vertical", command=self.treeClientes.yview)
@@ -85,7 +92,8 @@ class Gui:
         
         #self.listClientes.configure(yscrollcommand=self.scrollClientes.set)
         #self.scrollClientes.configure(command=self.listClientes.yview)
-        # Configure o grid para expandir
+        
+        # Configura o grid para expandir
         self.window.grid_rowconfigure(0, weight=1)
         self.window.grid_columnconfigure(2, weight=1)
         

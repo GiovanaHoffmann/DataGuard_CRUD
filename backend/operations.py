@@ -69,13 +69,33 @@ class ClientOperations:
 
     def search(self, nome="", sobrenome="", email="", cpf=""):
         cursor = self.db.conn.cursor()
-        cursor.execute(
-            """SELECT * FROM clientes 
-            WHERE nome ILIKE %s OR sobrenome ILIKE %s 
-            OR email ILIKE %s OR cpf LIKE %s
-            ORDER BY nome, sobrenome""",
-            (f"%{nome}%", f"%{sobrenome}%", f"%{email}%", f"%{cpf}%")
-        )
+        
+        # Constrói a query dinamicamente baseada nos parâmetros fornecidos
+        query = """SELECT * FROM clientes WHERE """
+        conditions = []
+        params = []
+        
+        if nome:
+            conditions.append("nome ILIKE %s")
+            params.append(f"%{nome}%")
+        if sobrenome:
+            conditions.append("sobrenome ILIKE %s")
+            params.append(f"%{sobrenome}%")
+        if email:
+            conditions.append("email ILIKE %s")
+            params.append(f"%{email}%")
+        if cpf:
+            cpf_clean = DataQuality.normalize_cpf(cpf)
+            conditions.append("cpf LIKE %s")
+            params.append(f"%{cpf_clean}%")
+        
+        # Se nenhum parâmetro foi fornecido, retorna todos os registros
+        if not conditions:
+            return self.view()
+        
+        query += " OR ".join(conditions) + " ORDER BY nome, sobrenome"
+        
+        cursor.execute(query, params)
         return cursor.fetchall()
 
     def update(self, id, nome, sobrenome, email, cpf):
