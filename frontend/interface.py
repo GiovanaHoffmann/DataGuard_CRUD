@@ -61,7 +61,7 @@ class Gui:
         self.btnViewAll = tk.Button(self.window, text="Ver todos")
         self.btnBuscar = tk.Button(self.window, text="Buscar")
         self.btnInserir = tk.Button(self.window, text="Inserir")
-        self.btnUpdate = tk.Button(self.window, text="Update")
+        self.btnUpdate = tk.Button(self.window, text="Atualizar")
         self.btnDelete = tk.Button(self.window, text="Deletar")
         self.btnLimpar = tk.Button(self.window, text="Limpar")
         #self.btnClose = tk.Button(self.window, text="Fechar")
