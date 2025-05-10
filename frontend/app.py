@@ -101,7 +101,10 @@ def insert_command():
         return
     
     try:
-        # Primeiro remove formatação
+        if not DataQuality.validate_email(app.txtEmail.get()):
+            raise ValueError("E-mail inválido!")
+        
+        # Primeiro remove formatação do cpf
         cpf_raw = DataQuality.normalize_cpf(app.txtCPF.get()) 
         
         # Depois valida o CPF limpo
