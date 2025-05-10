@@ -1,0 +1,6 @@
+__pycache__
+crudclients
+clientes.db
+.env
+client_governance.egg-info
+virtualenv
