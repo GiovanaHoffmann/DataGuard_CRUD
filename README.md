@@ -179,6 +179,6 @@ SELECT COUNT(DISTINCT cpf) FROM clientes WHERE ativo = TRUE;
 ## **📌 Valor para Engenharia de Dados**  
 - **Demonstra competências como**:  
   - Governança de dados  
-  - Modelagem dimensional (básica/embrionária)
-  - Pipelines de qualidade (básica/embrionária)
+  - Modelagem dimensional (básico neste projeto)
+  - Pipelines de qualidade (básico neste projeto)
   - Proteção de PII  
