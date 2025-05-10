@@ -56,6 +56,7 @@ class Gui:
         self.btnInserir = tk.Button(self.window, text="Inserir")
         self.btnUpdate = tk.Button(self.window, text="Update")
         self.btnDelete = tk.Button(self.window, text="Deletar")
+        self.btnLimpar = tk.Button(self.window, text="Limpar")
         #self.btnClose = tk.Button(self.window, text="Fechar")
             
         self.setup_layout()
@@ -79,6 +80,7 @@ class Gui:
         self.btnInserir.grid(row=6, column=0, columnspan=2)
         self.btnUpdate.grid(row=7, column=0, columnspan=2) 
         self.btnDelete.grid(row=8, column=0, columnspan=2) 
+        self.btnLimpar.grid(row=9, column=0, columnspan=2)
         #self.btnClose.grid(row=9, column=0, columnspan=2) 
         
         #self.listClientes.configure(yscrollcommand=self.scrollClientes.set)

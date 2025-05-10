@@ -80,6 +80,7 @@ def insert_command():
         )
         view_command()
         messagebox.showinfo("Sucesso", "Cliente inserido!")
+        clean_input_command()
     except Exception as e:
         messagebox.showerror("Erro", str(e))
 
@@ -146,6 +147,7 @@ if __name__=="__main__":
    app.btnInserir.configure(command=insert_command)
    app.btnUpdate.configure(command=update_command)
    app.btnDelete.configure(command=delete_command)
+   app.btnLimpar.configure(command=clean_input_command)
    #app.btnClose.configure(command=app.window.destroy)
    
  
