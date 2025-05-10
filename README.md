@@ -37,6 +37,14 @@ client-data-governance/
 
 ---
 
+## **⚙️ Bibliotecas Principais:**
+- `validate-docbr` para CPF
+- `email-validator` para e-mails
+- `psycopg2` para PostgreSQL
+- `python-dotenv` para variáveis de ambiente
+- `TKinter` para interface gráfica
+---
+
 ## **🔧 Funcionalidades Principais**  
 
 ### **1. Validação e Qualidade de Dados**  
@@ -65,8 +73,31 @@ VALUES ('UPDATE', 'clientes', 123, '{"nome": "João"}', '{"nome": "José"}');
   "dados_novos": {"email": "jo***@outlook.com"}
 }
 ```
+### **3. Soft Delete**
+O sistema nunca apaga registros completamente, apenas marca como inativo:
+```sql
 
-### **3. Interface de Gestão (TKinter)**  
+  UPDATE clientes SET ativo = FALSE WHERE id = 123;
+
+```
+
+### **5. Backup Automatizado**
+```bash
+  python scripts/backup_db.py
+
+```
+
+## **6. Módulo de Segurança de Dados**
+- **Anonimização inteligente**:
+  ```python
+  # Exemplo: anonimiza mantendo últimos 2 caracteres
+  DataQuality.anonymize_data("123.456.789-09")  # Retorna "***.***.***-09"
+  ```
+- **Validação em duas etapas** (frontend e backend)
+- **Proteção contra SQL Injection** (prepared statements)
+
+
+### **6. Interface de Gestão (TKinter)**  
 - **Cadastro** com validação em tempo real  
 - **Busca flexível** (por nome, CPF parcial, etc.)  
 - **Visualização de logs** (para fins de auditoria)  
